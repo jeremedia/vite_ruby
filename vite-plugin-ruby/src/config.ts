@@ -92,11 +92,10 @@ function coerceConfigurationValues (config: ResolvedConfig, projectRoot: string,
   if (booleanOption(config.skipProxy))
     server.origin = `${https ? 'https' : 'http'}://${config.host}:${config.port}`
 
-  // Connect directly to the Vite dev server, rack-proxy does not proxy websocket connections.
+  // use the user's hmr config if provided
   const hmr = userConfig.server?.hmr ?? {}
-  if (typeof hmr === 'object' && !hmr.hasOwnProperty('clientPort')) {
-    hmr.clientPort ||= port
-    server.hmr = hmr
+  if (typeof hmr === 'object') {
+    server.hmr = hmr;
   }
 
   // Use the sourceCodeDir as the Vite.js root.
